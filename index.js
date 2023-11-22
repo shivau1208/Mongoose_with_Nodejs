@@ -4,22 +4,51 @@ dotenv.config();
 const User = require("./model/User");
 
 mongoose.connect(process.env.DATABASE_URL);
-async function run() {
-  const newUser = new User({
-    firstName: "Shiva",
-    Age: 27,
-  });
-  newUser
-    .save()
-    .then(() => {
-      console.log(newUser);
-    })
-    .catch((error) => {
-      console.error("Error saving user:", error);
-    })
-    .finally(() => {
-      // Close the MongoDB connection after saving
-      mongoose.connection.close();
+async function dataInsert() {
+  try {
+    const newUser = await User.create({
+      firstName: "Shiva",
+      age: 26,
+      email: "test@test.com",
+      address: {
+        street: "8th main",
+        city: "Bangalore",
+        zipcode: 123456,
+      },
     });
+    await newUser.save();
+    console.log(newUser);
+  } catch (e) {
+    console.log(e.message);
+  }
 }
-run();
+
+async function dataFind() {
+  try {
+    console.log("hola!");
+    // works same as mongodb query;
+    // const user = await User.findOne({
+    //   firstName: "Shiva",
+    // });
+    // console.log(user);
+    // const user = await User.where("age")
+    //   .gt(20)
+    //   .where("firstName")
+    //   .equals("Shiva")
+    //   .limit(1)
+    //   .select('age');
+    // const user = await User.findByName("Shiva");
+    // console.log(user)
+    // user.sayHi()
+    // console.log(user);
+    // const user = await User.find().byName('Shiva')
+    // console.log(user)
+    // const user = await User.findOne({firstName:'Shiva',email:'test12@tst.com'})
+    // console.log(user.namedEmail)
+  } catch (e) {
+    console.log(e.message);
+  }
+}
+
+// dataInsert();
+// dataFind();
